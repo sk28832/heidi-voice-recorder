@@ -1,36 +1,74 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Voice Recorder
 
-## Getting Started
+A simple web app for recording and transcribing voice. Record your voice, get text transcriptions, and keep recording even when offline - it'll transcribe everything once you're back online.
 
-First, run the development server:
+[Check out the demo](your-demo-video-link)
+
+## Quick Start
+
+1. Clone and install:
+
+```bash
+git clone [your-repo]
+cd voice-recorder
+npm install
+```
+
+2. Get your API key from [AssemblyAI](https://www.assemblyai.com/) and add it to `.env.local`:
+
+```
+ASSEMBLYAI_API_KEY=your_key_here
+```
+
+3. Run it:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## What's Inside
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Built with Next.js 14, React, and AssemblyAI for transcription. The interface is built with shadcn/ui components and styled with Tailwind.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Main Features
 
-## Learn More
+- Record, pause, and stop recordings
+- Automatic speech-to-text conversion
+- Works offline - queue recordings and transcribe when back online
+- Shows different speakers in transcriptions
 
-To learn more about Next.js, take a look at the following resources:
+### Project Structure
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
+src/
+├── components/          # UI components
+├── hooks/              # Recording and transcription logic
+└── app/
+    └── api/            # AssemblyAI integration
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+#### Components
 
-## Deploy on Vercel
+- `VoiceRecorderContainer`: The main wrapper
+- `RecordingControls`: Record, pause, and stop buttons
+- `TranscriptDisplay`: Shows your transcribed text
+- `OfflineAlert`: Tells you when you're offline
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+#### Hooks
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `useAudioRecorder`: Handles all the recording stuff
+- `useTranscription`: Deals with the transcription API
+- `useNetworkQueue`: Manages offline recording queue
+
+The API endpoint at `/api/transcribe` handles file uploads to AssemblyAI and includes basic rate limiting.
+
+## Development
+
+The whole thing is built with:
+
+- Next.js 14
+- React (with hooks)
+- Web Audio API
+- AssemblyAI
+- shadcn/ui components
+- Tailwind CSS
