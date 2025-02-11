@@ -23,7 +23,6 @@ export const VoiceRecorderContainer = () => {
   const {
     transcript,
     isTranscribing,
-    error: transcriptionError,
     transcribeAudio,
   } = useTranscription();
   
@@ -46,7 +45,7 @@ export const VoiceRecorderContainer = () => {
           title: "Success",
           description: "Your recording has been transcribed.",
         });
-      } catch (error) {
+      } catch (_error) {
         toast({
           variant: "destructive",
           title: "Error",

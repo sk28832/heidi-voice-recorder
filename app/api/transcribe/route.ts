@@ -78,7 +78,8 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    if (!ALLOWED_MIME_TYPES.includes(audioFile.type as any)) {
+    type AllowedMimeType = typeof ALLOWED_MIME_TYPES[number];
+if (!ALLOWED_MIME_TYPES.includes(audioFile.type as AllowedMimeType)) {
       return NextResponse.json(
         { 
           error: `Invalid file type. Allowed types: ${ALLOWED_MIME_TYPES.join(', ')}` 
