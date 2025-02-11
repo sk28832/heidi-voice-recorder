@@ -1,39 +1,31 @@
 // components/VoiceRecorderContainer.tsx
-"use client"
-import { useCallback, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { useToast } from '@/hooks/use-toast';
-import { useAudioRecorder } from '@/hooks/useAudioRecorder';
-import { useTranscription } from '@/hooks/useTranscription';
-import { useNetworkQueue } from '@/hooks/useNetworkQueue';
-import { RecordingControls } from './RecordingControls';
-import { TranscriptDisplay } from './TranscriptDisplay';
-import { OfflineAlert } from './OfflineAlert';
+"use client";
+import { useCallback, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useToast } from "@/hooks/use-toast";
+import { useAudioRecorder } from "@/hooks/useAudioRecorder";
+import { useTranscription } from "@/hooks/useTranscription";
+import { useNetworkQueue } from "@/hooks/useNetworkQueue";
+import { RecordingControls } from "./RecordingControls";
+import { TranscriptDisplay } from "./TranscriptDisplay";
+import { OfflineAlert } from "./OfflineAlert";
 
 export const VoiceRecorderContainer = () => {
   const { toast } = useToast();
-  const { 
+  const {
     status,
     error: recordingError,
     startRecording,
     pauseRecording,
     stopRecording,
   } = useAudioRecorder();
-  
-  const {
-    transcript,
-    isTranscribing,
-    transcribeAudio,
-  } = useTranscription();
-  
-  const {
-    isOnline,
-    queue,
-    addToQueue,
-    processQueue,
-  } = useNetworkQueue();
+
+  const { transcript, isTranscribing, transcribeAudio } = useTranscription();
+
+  const { isOnline, queue, addToQueue, processQueue } = useNetworkQueue();
 
   // Handle stopping and transcribing
+
   const handleStop = useCallback(async () => {
     const audioBlob = await stopRecording();
     if (!audioBlob) return;
@@ -45,18 +37,26 @@ export const VoiceRecorderContainer = () => {
           title: "Success",
           description: "Your recording has been transcribed.",
         });
-      } catch (_error) {
+      } catch (error) {
+        // Remove underscore
+        // Actually use the error in our message
+        const errorMessage =
+          error instanceof Error
+            ? error.message
+            : "Failed to transcribe recording";
+
         toast({
           variant: "destructive",
           title: "Error",
-          description: "Failed to transcribe recording. Please try again.",
+          description: errorMessage,
         });
       }
     } else {
       addToQueue(audioBlob);
       toast({
         title: "Recording saved",
-        description: "Your recording will be transcribed when you're back online.",
+        description:
+          "Your recording will be transcribed when you're back online.",
       });
     }
   }, [isOnline, stopRecording, transcribeAudio, addToQueue, toast]);
@@ -64,19 +64,19 @@ export const VoiceRecorderContainer = () => {
   // Handle recording state changes
   useEffect(() => {
     switch (status) {
-      case 'recording':
+      case "recording":
         toast({
           title: "Recording started",
           description: "Speak clearly into your microphone.",
         });
         break;
-      case 'paused':
+      case "paused":
         toast({
           title: "Recording paused",
           description: "Click resume when you're ready to continue.",
         });
         break;
-      case 'processing':
+      case "processing":
         toast({
           title: "Processing",
           description: "Preparing your recording...",
@@ -118,11 +118,8 @@ export const VoiceRecorderContainer = () => {
             onPause={pauseRecording}
             onStop={handleStop}
           />
-          
-          <OfflineAlert 
-            isOffline={!isOnline}
-            queueSize={queue.length}
-          />
+
+          <OfflineAlert isOffline={!isOnline} queueSize={queue.length} />
 
           <TranscriptDisplay
             transcript={transcript}
