@@ -1,6 +1,6 @@
 // hooks/useTranscription.ts
 import { useState, useCallback } from 'react';
-import { TranscriptionState, TranscriptionResponse } from '@/types/voice-recorder';
+import { TranscriptionState } from '@/types/voice-recorder';
 
 export const useTranscription = () => {
   const [state, setState] = useState<TranscriptionState>({

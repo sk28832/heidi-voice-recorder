@@ -1,6 +1,6 @@
 // hooks/useAudioRecorder.ts
 import { useState, useRef, useCallback } from 'react';
-import { AudioRecorderState, RecordingStatus } from '@/types/voice-recorder';
+import { AudioRecorderState } from '@/types/voice-recorder';
 
 export const useAudioRecorder = () => {
   const [state, setState] = useState<AudioRecorderState>({
